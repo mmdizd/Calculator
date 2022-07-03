@@ -15,24 +15,25 @@ def loop():
     if String in ["exit","quit"]:
         shouldRun = False
     else :
-        snippets.magic(String)  
+        result = snippets.magic(String)
+        print("\t",String,"\t:\t ",result)
 
 testList = [
-    "1+2",
-    "10*3",
-    "13/9",
-    "4-3",
     "10+3*4-3",
     "5+(2+1)",
     "(10+12)-(3+(2+(5*5)))"
 ]
 
 def main():
-    print("input exit or quit to exit or quit. XD ")
-    while shouldRun :
-        loop()
+    print("input exit or quit to exit or quit. XD \n") 
+    print("testList Table:")
     for i in testList:
         result = snippets.magic(i)
-        print(i,"\t:\t ",result)
+        print("\t",i,"\t:\t ",result)
 
+    print("\n")
+
+    while shouldRun :
+        loop()
+        print("\n")
 main()

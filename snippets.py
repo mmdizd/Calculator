@@ -13,10 +13,94 @@
 """
 
 
+validNumbers = "012345689"
+mainOperators = "+-*/"
+
+def ifIsANumber(p_character):
+    if p_character != "":
+         return (p_character in validNumbers)
+
+    return 0
+
+def calculateOperation(p_operator, p_number_1, p_number_2):
+    p_number_1=float(p_number_1)
+    p_number_2=float(p_number_2)
+    if p_operator == "+": 
+        return str((p_number_1) + (p_number_2))
+    if p_operator == "-": 
+        return str((p_number_1) - (p_number_2))
+    if p_operator == "*": 
+        return str((p_number_1) * (p_number_2))
+    if p_operator == "/": 
+        return str((p_number_1) / (p_number_2))
+
+def is_operator(p_character):
+    if p_character != "": 
+        return (p_character in mainOperators)
+    else: 
+        return 0
+
+def operatorPriority(p_character):
+    if p_character in "+-": 
+        return 0
+    if p_character in "*/": 
+        return 1
+    
+
+def CalculateProblem(p_string):
+    p_string = list(p_string)
+    rplist = []
+    lplist = []
+    num = ""  
+    while len(p_string) > 0:
+        c = p_string.pop(0)
+        if len(p_string) > 0: d = p_string[0]
+        else: d = ""
+        if ifIsANumber(c):
+            num += c
+            if not ifIsANumber(d):
+                lplist.append(num)
+                num = ""
+        elif is_operator(c):
+            while True:
+                if len(rplist) > 0: top = rplist[-1]
+                else: top = ""
+                if is_operator(top):
+                    if not operatorPriority(c) > operatorPriority(top):
+                        number2 = lplist.pop()
+                        op = rplist.pop()
+                        number1 = lplist.pop()
+                        lplist.append(calculateOperation(op, number1, number2))
+                    else:
+                        rplist.append(c)
+                        break
+                else:
+                    rplist.append(c)
+                    break
+        elif c == "(":
+            rplist.append(c)
+        elif c == ")":
+            while len(rplist) > 0:
+                c = rplist.pop()
+                if c == "(":
+                    break
+                elif is_operator(c):
+                    number2 = lplist.pop()
+                    number1 = lplist.pop()
+                    lplist.append(calculateOperation(c, number1, number2))
+
+    while len(rplist) > 0:
+        c = rplist.pop()
+        if c == "(":
+            break
+        elif is_operator(c):
+            number2 = lplist.pop()
+            number1 = lplist.pop()
+            lplist.append(calculateOperation(c, number1, number2))
+
+    return lplist.pop()
 
 
-import pstats
-from unittest import result
 
 
 validCharacters = "()+-/*0123456789"
@@ -114,66 +198,16 @@ def isValid(p_string):
     return 1
 
 
-def calculateOperation(p_string):
-    0
-
-def calculateCell(p_string):
-    result = 0
-
-
-
-    return result
-    
-
-def calculateProblem(p_string):
-    
-    tempString = ""
-    rpi = 0
-    lpi = 0
-    tempString1 = ""
-    for i in range(len(p_string)):
-        if i != len(p_string)-1:
-            
-            if (p_string[i] not in ["(",")"]):
-                tempString+=p_string[i]
-            elif (p_string[i]=="("):
-                tempString=""
-                rpi = i
-            elif (p_string[i]==")") and (tempString!=""):
-                lpi = i
-
-                tempString1=""
-                for c in range(len(p_string)):
-                    if not ((c>=rpi) and (c<=lpi)):
-                        tempString1+=p_string[c]
-
-                print("\t",tempString1)
-                print("\t",tempString)
-                tempString=""
-            
-            
-            
-
-        else:
-
-
-            if (p_string[i]!=")"): tempString+=p_string[i]
-            if (tempString!="")  : 
-                print("\t",tempString)
-
-
-    return 0
 
 
 def magic(p_string):
-    myStack = []
+
     if isValid(p_string):
-        return calculateProblem(p_string)
+        return CalculateProblem(p_string)
     else:
         print("Error")
         return "Failed"
 
     
-
 
 
